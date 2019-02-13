@@ -29,17 +29,17 @@
 
 #include <gtest/gtest.h>
 #include <tf/transform_listener.h>
-#ifndef WIN32
-#include <sys/time.h>
-#else
+#ifdef _WIN32
 #include <time.h>
+#else
+#include <sys/time.h>
 #endif
 
 
 void seed_rand()
 {
   //Seed random number generator with current microseond count
-#ifdef WIN32
+#ifdef _WIN32
   srand((unsigned)time(NULL));
 #else
   timeval temp_time_struct;

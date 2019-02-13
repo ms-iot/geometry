@@ -30,10 +30,10 @@
 /** \author Tully Foote */
 
 #include "tf/tf.h"
-#ifndef WIN32
-#include <sys/time.h>
-#else
+#ifdef _WIN32
 #include <time.h>
+#else
+#include <sys/time.h>
 #endif
 #include "ros/assert.h"
 #include "ros/ros.h"
