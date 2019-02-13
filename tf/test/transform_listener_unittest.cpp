@@ -30,7 +30,7 @@
 #include <gtest/gtest.h>
 #include <tf/transform_listener.h>
 #ifdef _WIN32
-#include <time.h>
+#include <ctime>
 #else
 #include <sys/time.h>
 #endif
