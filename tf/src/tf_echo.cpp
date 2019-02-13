@@ -32,9 +32,6 @@
 #include "ros/ros.h"
 
 #define _USE_MATH_DEFINES
-#ifdef WIN32
-#include <math.h>
-#endif
 
 class echoListener
 {

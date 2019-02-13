@@ -92,10 +92,10 @@ int main(int argc, char ** argv)
       //Send some data
       myTestBroadcaster.test();
       myTestBroadcaster.test_vector();
-#ifndef WIN32
+#ifndef _WIN32
       usleep(1000);
 #else
-	  Sleep(1);
+      Sleep(1);
 #endif
   }
 
