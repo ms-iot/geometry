@@ -32,7 +32,6 @@
 #include "ros/ros.h"
 
 #define _USE_MATH_DEFINES
-
 class echoListener
 {
 public:
