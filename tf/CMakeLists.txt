@@ -2,9 +2,20 @@ cmake_minimum_required(VERSION 2.8)
 project(tf)
 
 include(CheckCXXCompilerFlag)
-check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
-if(COMPILER_SUPPORTS_CXX11)
+if(MSVC)
+  # https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version
+  # MSVC does not have c++11 switch, choose c++latest to always get a superset including c++11
+  unset(COMPILER_SUPPORTS_CXXLATEST CACHE)
+  check_cxx_compiler_flag("/std:c++latest" COMPILER_SUPPORTS_CXXLATEST)
+  if(COMPILER_SUPPORTS_CXXLATEST)
+    add_compile_options(/std:c++latest)
+  endif()
+else()
+  unset(COMPILER_SUPPORTS_CXX11 CACHE)
+  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  if(COMPILER_SUPPORTS_CXX11)
     add_compile_options(-std=c++11)
+  endif()
 endif()
 
 find_package(catkin REQUIRED COMPONENTS
