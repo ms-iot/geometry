@@ -5,12 +5,7 @@ include(CheckCXXCompilerFlag)
 unset(COMPILER_SUPPORTS_CXX11 CACHE)
 if(MSVC)
   # https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version
-  # MSVC will fail the following check since it does not have the c++11 switch
-  # however, c++11 is always enabled (the newer /std:c++14 is enabled by default)
-  check_cxx_compiler_flag(/std:c++11 COMPILER_SUPPORTS_CXX11)
-  if(COMPILER_SUPPORTS_CXX11)
-    add_compile_options(/std:c++11)
-  endif()
+  # MSVC has c++14 enabled by default, no need to specify c++11
 else()
   check_cxx_compiler_flag(-std=c++11 COMPILER_SUPPORTS_CXX11)
   if(COMPILER_SUPPORTS_CXX11)
@@ -30,7 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
     tf2_ros
 )
-find_package(Boost REQUIRED COMPONENTS thread signals system)
+find_package(Boost REQUIRED COMPONENTS thread system)
 
 catkin_python_setup()
 
@@ -139,7 +134,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-# Install shared library
+# Install library
 install(TARGETS ${PROJECT_NAME}
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -148,8 +143,6 @@ install(TARGETS ${PROJECT_NAME}
 
 # Install executable
 install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
