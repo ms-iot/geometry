@@ -29,7 +29,11 @@
 
 #include <gtest/gtest.h>
 #include <tf/tf.h>
+#ifdef _WIN32
+#include <ctime>
+#else
 #include <sys/time.h>
+#endif
 #include <ros/ros.h>
 #include "tf/LinearMath/Vector3.h"
 
@@ -41,9 +45,13 @@ using namespace tf;
 void seed_rand()
 {
   //Seed random number generator with current microseond count
+#ifdef _WIN32
+  srand((unsigned)time(NULL));
+#else
   timeval temp_time_struct;
   gettimeofday(&temp_time_struct,NULL);
   srand(temp_time_struct.tv_usec);
+#endif
 };
 
 void generate_rand_vectors(double scale, uint64_t runs, std::vector<double>& xvalues, std::vector<double>& yvalues, std::vector<double>&zvalues)
@@ -755,7 +763,7 @@ TEST(tf, setTransformNoInsertWithNan)
   StampedTransform tranStamped(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(0,0,0)), ros::Time().fromNSec(10.0), "same_frame", "other_frame");
   EXPECT_TRUE(mTR.setTransform(tranStamped));
 
-  tranStamped.setOrigin(tf::Point(1.0,1.0,0.0/0.0));
+  tranStamped.setOrigin(tf::Point(1.0,1.0,NAN));
   EXPECT_TRUE(std::isnan(tranStamped.getOrigin().z()));
   EXPECT_FALSE(mTR.setTransform(tranStamped));
 
@@ -2392,7 +2400,7 @@ TEST(tf, assertQuaternionValid)
 
   // check NaNs
   q.setValue(1,0,0,0);
-  q.setX(0.0/0.0);
+  q.setX(NAN);
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.setX(1.0);
 
@@ -2400,11 +2408,11 @@ TEST(tf, assertQuaternionValid)
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.setY(0.0);
 
-  q.setZ(0.0/0.0);
+  q.setZ(NAN);
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.setZ(0.0);
 
-  q.setW(0.0/0.0);
+  q.setW(NAN);
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.setW(0.0);
 
@@ -2447,7 +2455,7 @@ TEST(tf, assertQuaternionMsgValid)
 
   // check NaNs
   q.x = 1.0; q.y = 0.0; q.z = 0.0; q.w = 0.0;
-  q.x = 0.0/0.0;
+  q.x = NAN;
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.x = 1.0;
 
@@ -2455,11 +2463,11 @@ TEST(tf, assertQuaternionMsgValid)
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.y = 0.0;
 
-  q.z = 0.0/0.0;
+  q.z = NAN;
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.z = 0.0;
 
-  q.w = 0.0/0.0;
+  q.w = NAN;
   EXPECT_TRUE(expectInvalidQuaternion(q));
   q.w = 0.0;
 
