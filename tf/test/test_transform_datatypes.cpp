@@ -29,7 +29,9 @@
 
 #include <gtest/gtest.h>
 #include <tf/tf.h>
+#ifndef _WIN32
 #include <sys/time.h>
+#endif
 
 #include "tf/LinearMath/Vector3.h"
 
