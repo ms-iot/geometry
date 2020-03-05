@@ -29,16 +29,24 @@
 
 #include <gtest/gtest.h>
 #include <tf/transform_listener.h>
+#ifdef _WIN32
+#include <ctime>
+#else
 #include <sys/time.h>
+#endif
 
 
 void seed_rand()
 {
   //Seed random number generator with current microseond count
+#ifdef _WIN32
+  srand((unsigned)time(NULL));
+#else
   timeval temp_time_struct;
   gettimeofday(&temp_time_struct,NULL);
   srand(temp_time_struct.tv_usec);
-}
+#endif
+};
 
 void generate_rand_vectors(double scale, uint64_t runs, std::vector<double>& xvalues, std::vector<double>& yvalues, std::vector<double>&zvalues)
 {
