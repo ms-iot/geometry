@@ -28,7 +28,11 @@
  */
 
 #include <vector>
+#ifdef _WIN32
+#include <ctime>
+#else
 #include <sys/time.h>
+#endif
 #include <cstdio>
 #include <gtest/gtest.h>
 
@@ -40,10 +44,14 @@ double epsilon = 10E-6;
 void seed_rand()
 {
   //Seed random number generator with current microseond count
+#ifdef _WIN32
+  srand((unsigned)time(NULL));
+#else
   timeval temp_time_struct;
   gettimeofday(&temp_time_struct,NULL);
   srand(temp_time_struct.tv_usec);
-}
+#endif
+};
 
 void testQuatRPY(tf::Quaternion q_baseline)
 {
